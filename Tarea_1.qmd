@@ -113,3 +113,5 @@ q - 5p^3 - 15 &=& 0\\
 
 Realiza una gráfica de las curvas y aproxima el punto de equilibrio con la función `fsolve`.
 :::
+
+Segunda versión 
