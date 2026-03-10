@@ -146,6 +146,8 @@ print("----------------")
 print(f"La segunda raíz por el método de la secante es: {raiz2_s2}")
 ```
 
+Los tres métodos llegaron a las reíces 2 y 3, pero el más eficiente fue el de bisección porque fue el que encontró las raíces en una sola interación. En cambio el método de Nweton necesitó de más iteraciones. Por último el método de la secante fue el utilizó la mayor cantidad de iteraciones, aunque mostró más aproximación en cuestión de los decimales.
+
 ::: {#exr-tarea1_2}
 Un polinomio cúbico de la forma $f(x)=ax^3+bx^2+cx+d$ con tres raíces reales distintas.
 :::
@@ -260,6 +262,9 @@ print("----------------")
 print(f"La tercer raíz por el método de la secante es: {raiz3_s3}")
 ```
 
+
+Aquí el ganador fue el método de bisección porque con una sola iteración logró encontrar la raíz exacta.
+
 ::: {#exr-tarea1_3}
 $f(x)= x^3 -5x^2e^{-x}+e^{-3x}$, para $0\leq x \leq 2$
 :::
@@ -359,77 +364,250 @@ print("----------------")
 print(f"La segunda raíz por el método de la secante es: {raiz2_s}")
 ```
 
+Aquí fue todo lo contrario a los ejercicios pasados, pues en este caso el método de Newton y de la secante fueron más precisos.
+
+
 ::: {#exr-tarea1_4}
 La primera raíz positiva de $g(x)= e^{-x}-cos(ax)$ para $a=1, 3, 5, 9$.
 :::
 
-```{python}
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import optimize
-
-valores_a = [1, 3, 5, 9]
-
-for a in valores_a:
-    
-    print("\n===========================")
-    print(f"Resultados para a = {a}")
-    print("===========================\n")
-    
-    g = lambda x: np.exp(-x) - np.cos(a*x)
-    dg = lambda x: -np.exp(-x) + a*np.sin(a*x)
-    
-    # -------- GRÁFICA --------
-    x = np.linspace(0, 4, 400)
-    y = g(x)
-    
-    plt.figure(figsize=(6,4))
-    plt.plot(x,y)
-    plt.axhline(0, linestyle="--")
-    plt.title(f"Gráfica para a = {a}")
-    plt.xlabel("x")
-    plt.ylabel("g(x)")
-    plt.grid()
-    plt.show()
-```
+## a=1
 
 ```{python}
-    # -------- BISECCIÓN --------
-    # Buscar intervalo con cambio de signo
-    for i in range(len(x)-1):
-        if y[i]*y[i+1] < 0:
-            a_int = x[i]
-            b_int = x[i+1]
-            break
-    
-    raiz_b, info_b = optimize.bisect(g, a_int, b_int, full_output=True)
-    
-    print("Método de Bisección")
-    print(f"Raíz ≈ {raiz_b}")
-    print(info_b)
-    print("-------------------")
+#| code-fold: true
+a = 1
+
+g = lambda x: np.exp(-x) - np.cos(a*x)
+
+x = np.linspace(0, 5, 400)
+y = g(x)
+
+plt.figure(figsize=(8,6))
+plt.plot(x, y, color="#5535aa")
+plt.axhline(0, color="red", linestyle="--")
+plt.title("Gráfica para a = 1")
+plt.xlabel("x")
+plt.ylabel("g(x)")
+plt.grid()
+plt.show()
 ```
+
+**Método de Bisección para a=1**
 
 ```{python}
-    # -------- NEWTON --------
-    raiz_n, info_n = optimize.newton(g, x0=a_int, fprime=dg, full_output=True)
-    
-    print("Método de Newton")
-    print(f"Raíz ≈ {raiz_n}")
-    print(info_n)
-    print("-------------------")
+#| code-fold: true
+raiz_b, raizb_info = optimize.bisect(g, 1, 2, full_output=True)
+
+print("Método de bisección")
+print(raizb_info)
+print("---------")
+print(f"La segunda raíz por el método de bisección es: {raiz_b}")
 ```
+
+**Método de Newton para a=1**
+```{python}
+#| code-fold: true
+df= lambda x:-np.exp(-x) + np.sin(x)
+
+raiz_n, raizn_info = optimize.newton(g, x0=2, fprime= df, full_output=True)
+
+print("Método de Newton")
+print(raizn_info)
+print("-------------")
+print(f"La primera raiz por el método de Newton es: {raiz_n}")
+```
+
+**Método de la Secante para a=1**
 
 ```{python}
-    # -------- SECANTE --------
-    raiz_s, info_s = optimize.newton(g, x0=a_int, x1=b_int, full_output=True)
-    
-    print("Método de la Secante")
-    print(f"Raíz ≈ {raiz_s}")
-    print(info_s)
+#| code-fold: true
+raiz_s, raizs_info = optimize.newton(g, x0=1, x1=1.5, full_output= True)
+
+print("Método de la secante")
+print(raizs_info)
+print("------------")
+print(f"La primera raíz por el método de la secante es : {raiz_s}")
 ```
 
-**Aquí me apoyé de IA porque no me quedaba el código (ejercicio 4)**
+## a=3
+```{python}
+#| code-fold: true
+a = 3
+
+g = lambda x: np.exp(-x) - np.cos(a*x)
+
+x = np.linspace(0, 5, 400)
+y = g(x)
+
+plt.figure(figsize=(8,6))
+plt.plot(x, y, color="#be3181")
+plt.axhline(0, color="black", linestyle="--")
+plt.title("Gráfica para a = 3")
+plt.xlabel("x")
+plt.ylabel("g(x)")
+plt.grid()
+plt.show()
+```
+
+**Aproximacíon de la primera raíz para a=3 por el método de la bisección**
+
+```{python}
+#| code-fold: true
+raiz_b, raizb_info = optimize.bisect(g, 0.1, 0.5, full_output=True)
+
+print("Método de bisección")
+print(raizb_info)
+print("---------")
+print(f"La segunda raíz por el método de bisección es: {raiz_b}")
+```
+
+**Aproximación de la primera raíz para a=3 por Newton**
+
+```{python}
+#| code-fold: true
+df= lambda x:-np.exp(-x) + 3*np.sin(3*x)
+
+raiz_n, raizn_info = optimize.newton(g, x0=0.2, fprime= df, full_output=True)
+
+print("Método de Newton")
+print(raizn_info)
+print("-------------")
+print(f"La primera raiz por el método de Newton es: {raiz_n}")
+
+```
+
+**Aproximación de la primera raiz para a=3 por el método de la secante**
+
+```{python}
+#| code-fold: true
+raiz_s, raizs_info = optimize.newton(g, x0=0.1, x1=0.5, full_output= True)
+
+print("Método de la secante")
+print(raizs_info)
+print("------------")
+print(f"La primera raíz por el método de la secante es : {raiz_s}")
+```
+
+## a=5
+```{python}
+#| code-fold: true
+a = 3
+
+g = lambda x: np.exp(-x) - np.cos(a*x)
+
+x = np.linspace(0, 5, 400)
+y = g(x)
+
+plt.figure(figsize=(8,6))
+plt.plot(x, y, color="#52bea8")
+plt.axhline(0, color="black", linestyle="--")
+plt.title("Gráfica para a = 5")
+plt.xlabel("x")
+plt.ylabel("g(x)")
+plt.grid()
+plt.show()
+```
+
+**Aproximacíon de la primera raíz para a=5 por el método de la bisección**
+
+```{python}
+#| code-fold: true
+raiz_b, raizb_info = optimize.bisect(g, 0.01, 0.5, full_output=True)
+
+print("Método de bisección")
+print(raizb_info)
+print("---------")
+print(f"La segunda raíz por el método de bisección es: {raiz_b}")
+```
+
+**Aproximación de la primera raíz para a=5 por Newton**
+
+```{python}
+#| code-fold: true
+df= lambda x:-np.exp(-x) + 5*np.sin(5*x)
+
+raiz_n, raizn_info = optimize.newton(g, x0=0.1, fprime= df, full_output=True)
+
+print("Método de Newton")
+print(raizn_info)
+print("-------------")
+print(f"La primera raiz por el método de Newton es: {raiz_n}")
+
+```
+
+**Aproximación de la primera raiz para a=5 por el método de la secante**
+
+```{python}
+#| code-fold: true
+raiz_s, raizs_info = optimize.newton(g, x0=0.01, x1=0.1, full_output= True)
+
+print("Método de la secante")
+print(raizs_info)
+print("------------")
+print(f"La primera raíz por el método de la secante es : {raiz_s}")
+```
+
+## a=9
+```{python}
+#| code-fold: true
+a = 3
+
+g = lambda x: np.exp(-x) - np.cos(a*x)
+
+x = np.linspace(0, 5, 400)
+y = g(x)
+
+plt.figure(figsize=(8,6))
+plt.plot(x, y, color="#bb27d8")
+plt.axhline(0, color="black", linestyle="--")
+plt.title("Gráfica para a = 9")
+plt.xlabel("x")
+plt.ylabel("g(x)")
+plt.grid()
+plt.show()
+```
+
+**Aproximacíon de la primera raíz para a=9 por el método de la bisección**
+
+```{python}
+#| code-fold: true
+raiz_b, raizb_info = optimize.bisect(g, 0.01, 0.025, full_output=True)
+
+print("Método de bisección")
+print(raizb_info)
+print("---------")
+print(f"La segunda raíz por el método de bisección es: {raiz_b}")
+```
+
+**Aproximación de la primera raíz para a=9 por Newton**
+
+```{python}
+#| code-fold: true
+df= lambda x:-np.exp(-x) + 9*np.sin(9*x)
+
+raiz_n, raizn_info = optimize.newton(g, x0=0.02, fprime= df, full_output=True)
+
+print("Método de Newton")
+print(raizn_info)
+print("-------------")
+print(f"La primera raiz por el método de Newton es: {raiz_n}")
+
+```
+
+**Aproximación de la primera raiz para a=9 por el método de la secante**
+
+```{python}
+#| code-fold: true
+raiz_s, raizs_info = optimize.newton(g, x0=0.01, x1=0.025, full_output= True)
+
+print("Método de la secante")
+print(raizs_info)
+print("------------")
+print(f"La primera raíz por el método de la secante es : {raiz_s}")
+```
+
+El método de Newton fue el más rápido, pero a su vez fue el más sensible, ya que, si no estaba lo suficientemente cerca la raíz daba resultados erroneos. Así que el método de la bisección fue el más estable a pesar de utilizar más iteraciones.
+
 
 ::: {#exr-tarea1_5}
 $g(x)= e^x-log(x+1) -b$ donde $b=2, 3, 5$.
@@ -510,21 +688,20 @@ Todas las raíces de $f(x)= \sqrt{x}-sen(x) -c$ para $c=1,\pi$.
 #| fig-align: "center"
 
 f = lambda x,c: np.sqrt(x) - np.sin(x) - c
-
-x = np.linspace(0, 40, 500)
-y1 = f(x, c=1)
-y2 = f(x, c=np.pi)
+x = np.linspace(0, 20, 500)
+y1 = f(x,1)
+y2 = f(x,np.pi)
 
 # Crear gráfica
 plt.figure(figsize=(8,6)) # Tamaño en pulgadas
-plt.plot(x,y1, color ="firebrick", label = "c=1")
+plt.plot(x,y1, color ="#456278", label = "c=1")
 plt.plot(x,y2, color ="#3fbd80", label = "c=pi")
 plt.axhline(0, color = "black", linewidth = 0.8, linestyle = "--") #Eje x
 plt.axvline(0, color = "black", linewidth = 0.8, linestyle = "--") #Eje y
 plt.legend(fontsize = 14)
 
 # Personalizar gráfica
-plt.title("Gráfica Ejercicio 6", fontsize= 14)
+plt.title(r"Gráfica Ejercicio 6")
 plt.xlabel("x")
 plt.ylabel("y")
 plt.grid()
@@ -553,6 +730,7 @@ La derivada de la función es: $f'(x) = \frac{1}{2\sqrt{x}} - cos(x)$
 
 df = lambda x,c: 1/(2*np.sqrt(x)) - np.cos(x)
 raiz_n, raizn_info = optimize.newton(f, x0 = 4, fprime= df, args=(1,), full_output=True)
+
 print("Método de Newton")
 print(raizn_info)
 print("----------------")
@@ -563,12 +741,14 @@ print(f"La raíz para c=1 por el método de Newton es: {raiz_n}")
 
 ```{python}
 #| code-fold: true
+c = 1
 
-raiz_s, raizs_info = optimize.newton(f, x0 = 1, x1=4, args=(1,), full_output=True)
+raiz_s, raizs_info = optimize.newton(f, x0=1, x1=4, args=(c,), full_output=True)
+
 print("Método de la secante")
 print(raizs_info)
-print("----------------")
-print(f"La raíz para c=1 por el método de la secante es: {raiz_s}")
+print("------------")
+print(f"La primera raíz por el método de la secante es : {raiz_s}")
 ```
 
 **Raíces para $c=\pi$**
@@ -603,7 +783,61 @@ print(f"Raíz para c=pi por el método de Newton: {rn}")
 print(f"Raíz para c=pi por el método de la secante: {rs}")
 ```
 
+## 3ra raíz
+```{python}
+#| code-fold: true
+import numpy as np
+from scipy import optimize
+
+f = lambda x: np.sqrt(x) - np.sin(x) - np.pi
+df = lambda x: 1/(2*np.sqrt(x)) - np.cos(x)
+
+rb, rinfob = optimize.bisect(f, 7, 10, full_output=True)
+rn, rinfon = optimize.newton(f, x0=9, fprime=df, full_output=True)
+rs, rinfo = optimize.newton(f, x0=8, x1=10, full_output=True)
+
+print(f"Raíz bisección: {rb}")
+print(f"Raíz newton: {rn}")
+print(f"Raíz secante: {rs}")
+```
+
+## 4ta raíz
+
+```{python}
+import numpy as np
+from scipy import optimize
+
+f = lambda x: np.sqrt(x) - np.sin(x) - np.pi
+df = lambda x: 1/(2*np.sqrt(x)) - np.cos(x)
+```
+
+```{python}
+#| code-fold: true
+rb, rinfob = optimize.bisect(f, 12, 14, full_output=True)
+rn, rinfon = optimize.newton(f, x0=12.5, fprime=df, full_output=True)
+rs, rinfo = optimize.newton(f, x0=12.5, x1=14, full_output=True)
+
+print(f"Raíz bisección: {rb}")
+print(f"Raíz newton: {rn}")
+print(f"Raíz secante: {rs}")
+```
+
+## 5ta raíz 
+
+```{python}
+#| code-fold: true
+rb, rinfob = optimize.bisect(f, 14, 15, full_output=True)
+rn, rinfon = optimize.newton(f, x0=14.5, fprime=df, full_output=True)
+rs, rinfo = optimize.newton(f, x0=14, x1=15, full_output=True)
+
+print(f"Raíz bisección: {rb}")
+print(f"Raíz newton: {rn}")
+print(f"Raíz secante: {rs}")
+```
+
 :::
+
+Para c= 1 sólo hay una única raíz real, pero para c= pi hubieron 5 raices reales. Los tres métodos funcionaron muy bien.
 
 ::: {#exr-tarea1_7}
 El sistema de ecuaciones no lineales:
@@ -715,6 +949,8 @@ plt.show()
 ```
 
 
+**Aquí me apoyé un poco de IA para poner los puntos en la gráfica porque me marcaba error y error**
+
 :::
 
 ::: {#exr-tarea1_8}
@@ -799,6 +1035,66 @@ y^3 -x - 4 &=& 0\\
 \end{eqnarray}
 
 Realiza una gráfica de las curvas de nivel y aproxima la solución con la función `fsolve`.
+
+```{python}
+#| code-fold: true 
+#| fig-align: "center"
+
+
+# Curvas despejadas
+f = lambda x: 6 - x**3          
+g = lambda y: y**3 - 4        
+
+x = np.linspace(-3,3,500)
+y = np.linspace(-3,3,500)
+
+plt.figure(figsize=(8,6))
+plt.plot(x, f(x), label="y = 6 - x^3")
+plt.plot(g(y), y, label="x = y^3 - 4")
+plt.axhline(0, color="red", linestyle="--")
+plt.axvline(0, color="black", linestyle="--")
+plt.title("Gráfica del ejercicio 9")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.legend()
+plt.grid()
+plt.show()
+```
+
+```{python}
+#| code-fold: true 
+
+import numpy as np
+from scipy import optimize
+
+def sistema(vars):
+    x, y = vars
+    return [x**3 + y - 6, y**3 - x - 4]
+
+solucion = optimize.fsolve(sistema, x0=[1,1])
+
+print(f"La solución aproximada es: {solucion}")
+```
+
+```{python}
+#| code-fold: true 
+#| fig-align: "center"
+
+plt.figure(figsize=(8,6))
+
+plt.plot(x, f(x), label="y = 6 - x^3")
+plt.plot(g(y), y, label="x = y^3 - 4")
+plt.plot(solucion[0], solucion[1], marker="o", ms=8, color= "#de3b9a")
+plt.axhline(0, color="black", linestyle="--")
+plt.axvline(0, color="black", linestyle="--")
+plt.title("Intersección - Ejercicio 9")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.legend()
+plt.grid()
+plt.show()
+```
+
 :::
 
 ::: {#exr-tarea1_10}
@@ -830,4 +1126,57 @@ q - 5p^3 - 15 &=& 0\\
 \end{eqnarray}
 
 Realiza una gráfica de las curvas y aproxima el punto de equilibrio con la función `fsolve`.
+
+```{python}
+#| code-fold: true 
+#| fig-align: "center"
+
+p = np.linspace(0,4,500)
+
+qd = 200 - 10*p**2
+qs = 5*p**3 + 15
+
+plt.figure(figsize=(8,6))
+plt.plot(p, qd, label="Demanda")
+plt.plot(p, qs, label="Oferta")
+plt.axhline(0, color="blue", linestyle="--")
+plt.axvline(0, color="black", linestyle="--")
+plt.title("Ejercicio 10 - Oferta y Demanda")
+plt.xlabel("Precio (p)")
+plt.ylabel("Cantidad (q)")
+plt.legend()
+plt.grid()
+plt.show()
+```
+
+```{python}
+#| code-fold: true 
+
+def sistema(vars):
+    p, q = vars
+    return [q + 10*p**2 - 200,q - 5*p**3 - 15]
+
+solucion = optimize.fsolve(sistema, x0=[2,50])
+
+print(f"El punto de equilibrio es: {solucion}")
+
+```
+
+```{python}
+#| code-fold: true 
+#| fig-align: "center"
+
+plt.figure(figsize=(8,6))
+
+plt.plot(p, qd, label="Demanda")
+plt.plot(p, qs, label="Oferta")
+plt.plot(solucion[0], solucion[1], marker="o", ms=8, color= "firebrick")
+plt.axhline(0, color="pink", linestyle="--")
+plt.axvline(0, color="purple", linestyle="--")
+plt.title("Punto de Equilibrio")
+plt.legend()
+plt.grid()
+plt.show()
+```
+
 :::
